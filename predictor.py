@@ -4,14 +4,6 @@ import numpy as np
 import xgboost as xgb
 import json
 
-
-# ## *Load JSON File*
-# We load the JSON file that will help us to preprocess One Hot Encoding data.
-
-# In[32]:
-
-
-
 st.cache(allow_output_mutation=True)
 
 def json_file():
@@ -22,12 +14,6 @@ def json_file():
         data_json = np.asarray(data_json['data_columns'])
 
     return data_json
-
-
-# ## *User Inputs Widgets*
-# Create the widgets so that the user enters the data in a comfortable way.
-
-# In[33]:
 
 
 st.cache(allow_output_mutation=True)
@@ -122,11 +108,6 @@ def UserInputs():
     return manufacturer,model_car,trasmission,year,fuelType,engineSize,mileage
 
 
-# ## *One Hot Encoding*
-
-# In[37]:
-
-
 st.cache(allow_output_mutation=True)
 
 def preprocess():
@@ -157,23 +138,11 @@ def preprocess():
     return np.asarray([data])
 
 
-# ## *Load Model*
-
-# In[35]:
-
-
 st.cache(allow_output_mutation=True)
 
 def predict(new_data):
     model = xgb.XGBRegressor().load_model("cars_sales_model.json")
     return  np.round(model.predict(new_data)).astype(int)
-
-
-# ## *Generate Predictions*
-# The user clicks the "Predict" button to generate the prediction.
-
-# In[36]:
-
 
 st.cache(allow_output_mutation=True)
 
