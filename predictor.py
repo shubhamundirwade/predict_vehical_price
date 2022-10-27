@@ -4,27 +4,48 @@ import numpy as np
 import xgboost as xgb
 import json
 
-st.cache(allow_output_mutation= True)
+
+# ## *Load JSON File*
+# We load the JSON file that will help us to preprocess One Hot Encoding data.
+
+# In[32]:
+
+
+
+st.cache(allow_output_mutation=True)
 
 def json_file():
+    
     with open("columns.json") as columns:
+        
         data_json = json.loads(columns.read())
-        data_json = np.asarray(data_json["data_columns"])
+        data_json = np.asarray(data_json['data_columns'])
 
     return data_json
 
-# user inputs 
+
+# ## *User Inputs Widgets*
+# Create the widgets so that the user enters the data in a comfortable way.
+
+# In[33]:
+
+
 st.cache(allow_output_mutation=True)
 
 def UserInputs():
+    
     manufacturer = st.selectbox("Manufacturer",("Ford","Toyota","Hyundai",
                                                 "Volkswagen","Skoda","Vauxhall",
                                                 "BMW","Audi","Mercedes-Benz"))
+    
     if manufacturer == "Ford":
+        
         model_car = st.selectbox("Model",('Fiesta', 'Focus', 'Kuga', 'EcoSport', 'C-MAX', 'Ka+',
        'Tourneo Custom', 'S-MAX', 'B-MAX', 'Edge', 'Tourneo Connect',
        'Puma', 'Mondeo', 'KA', 'Grand C-MAX', 'Galaxy', 'Mustang',
        'Grand Tourneo Connect', 'Fusion'))
+        
+        
     if manufacturer == "Toyota":
         
         
@@ -82,7 +103,8 @@ def UserInputs():
        'C Class', 'E Class', 'GL Class', 'CLS Class', 'A Class', 'SLK',
        'CLA Class', 'V Class', 'CL Class', 'GLS Class', 'M Class',
        'X-CLASS', 'S Class'))
-
+                                                    
+    
     trasmission = st.radio('Trasmission',('Automatic','Manual','Semi-Auto'))
     
     year = st.slider('Year',min_value = 2000,max_value = 2020,step = 1)
@@ -97,9 +119,13 @@ def UserInputs():
     mileage = st.number_input('Mile Age',min_value = 3100,max_value = 100000)
    
 
-    return manufacturer,model_car,trasmission,year,fuelType,engineSize, mileage
+    return manufacturer,model_car,trasmission,year,fuelType,engineSize,mileage
 
-    
+
+# ## *One Hot Encoding*
+
+# In[37]:
+
 
 st.cache(allow_output_mutation=True)
 
@@ -130,12 +156,23 @@ def preprocess():
         
     return np.asarray([data])
 
-    
+
+# ## *Load Model*
+
+# In[35]:
+
+
 st.cache(allow_output_mutation=True)
 
 def predict(new_data):
     model = xgb.XGBRegressor().load_model("cars_sales_model.json")
     return  np.round(model.predict(new_data)).astype(int)
+
+
+# ## *Generate Predictions*
+# The user clicks the "Predict" button to generate the prediction.
+
+# In[36]:
 
 
 st.cache(allow_output_mutation=True)
